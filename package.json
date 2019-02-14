@@ -37,6 +37,9 @@
       },
       "useJSXTextNode": true,
       "project": "./tsconfig.json"
+    },
+    "rules": {
+      "@typescript-eslint/no-use-before-define": "off"
     }
   },
   "browserslist": [

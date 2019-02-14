@@ -1,19 +1,9 @@
 import React from "react";
-import { EventData } from "../api/apiTypes";
 import { fetchPopularEvents } from "../api/requests";
 import Event from "./Event";
 
-interface EventDataMap {
-  [marketId: string]: EventData;
-}
-
-interface State {
-  events: EventDataMap;
-  selectedEvent: string | null;
-}
-
-class Menu extends React.Component<unknown, State> {
-  constructor(props: unknown) {
+class Menu extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {
       events: {},
@@ -23,7 +13,7 @@ class Menu extends React.Component<unknown, State> {
 
   componentDidMount() {
     fetchPopularEvents().then(events => {
-      const eventDataMap: EventDataMap = {};
+      const eventDataMap = {};
       for (const event of events) {
         eventDataMap[event.id] = event;
       }

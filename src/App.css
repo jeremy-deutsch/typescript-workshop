@@ -9,6 +9,11 @@
   align-self: center;
 }
 
+.eventButtons {
+  display: flex;
+  justify-content: space-between;
+}
+
 .eventButton {
   margin: 2px;
 }

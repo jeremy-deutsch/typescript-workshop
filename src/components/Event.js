@@ -1,19 +1,9 @@
 import React from "react";
 import { fetchMarkets } from "../api/requests";
-import { MarketData, EventType } from "../api/apiTypes";
+import { EventType } from "../api/apiTypes";
 
-interface Props {
-  id: string;
-  name: string;
-  type: string;
-}
-
-interface State {
-  markets: MarketData[];
-}
-
-class Event extends React.Component<Props, State> {
-  constructor(props: Props) {
+class Event extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {
       markets: []
@@ -23,13 +13,13 @@ class Event extends React.Component<Props, State> {
   componentDidMount() {
     this.fetchMarketsForId(this.props.id);
   }
-  componentDidUpdate(prevProps: Props) {
+  componentDidUpdate(prevProps) {
     if (this.props.id !== prevProps.id) {
       this.fetchMarketsForId(this.props.id);
     }
   }
 
-  fetchMarketsForId(id: string) {
+  fetchMarketsForId(id) {
     fetchMarkets(id).then(markets => {
       this.setState({ markets });
     });
@@ -38,7 +28,7 @@ class Event extends React.Component<Props, State> {
   render() {
     const { markets } = this.state;
     const { name, type } = this.props;
-    const typeName = isEventType(type) && eventTypeMapping[type];
+    const typeName = eventTypeMapping[type];
     return (
       <div>
         <h2>{name}</h2>
@@ -57,8 +47,7 @@ class Event extends React.Component<Props, State> {
   }
 }
 
-function volumeAdjective(volume: number | null) {
-  if (volume === null) return "N/A";
+function volumeAdjective(volume) {
   if (volume === 0) return "none";
   if (volume < 100) return "very little";
   if (volume < 800) return "some";
@@ -66,10 +55,6 @@ function volumeAdjective(volume: number | null) {
   if (volume < 20000) return "a lot";
   if (volume < 80000) return "hot";
   return "super hot";
-}
-
-function isEventType(type: string): type is EventType {
-  return Object.values(EventType).includes(type);
 }
 
 const eventTypeMapping = {

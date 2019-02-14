@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import Menu from "./complete/components/Menu";
+import React from "react";
+import Menu from "./components/Menu";
 import "./App.css";
 
 function App() {
