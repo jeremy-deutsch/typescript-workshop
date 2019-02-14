@@ -3,34 +3,47 @@ import { EventData } from "../api/apiTypes";
 import { fetchPopularEvents } from "../api/requests";
 import Event from "./Event";
 
+interface EventDataMap {
+  [marketId: string]: EventData;
+}
+
 interface State {
-  events: EventData[];
+  events: EventDataMap;
   selectedEvent: string | null;
 }
 
-class Menu extends React.Component<{}, State> {
-  constructor(props: {}) {
+class Menu extends React.Component<unknown, State> {
+  constructor(props: unknown) {
     super(props);
     this.state = {
-      events: [],
+      events: {},
       selectedEvent: null
     };
   }
 
   componentDidMount() {
     fetchPopularEvents().then(events => {
-      this.setState({ events });
+      const eventDataMap: EventDataMap = {};
+      for (const event of events) {
+        eventDataMap[event.id] = event;
+      }
+      this.setState({ events: eventDataMap });
     });
   }
 
   render() {
+    const { events, selectedEvent } = this.state;
+    const eventArray = Object.keys(events).map(id => events[id]);
+    const selectedEventData =
+      selectedEvent !== null ? events[selectedEvent] : null;
     return (
-      <div>
-        <h1>What can you bet on on Smarkets?</h1>
+      <div className="container">
+        <h1 className="title">What can you bet on on Smarkets?</h1>
         <div>
           <div>
-            {this.state.events.map(event => (
+            {eventArray.map(event => (
               <button
+                className="eventButton"
                 onClick={() => {
                   this.setState({ selectedEvent: event.id });
                 }}
@@ -40,8 +53,8 @@ class Menu extends React.Component<{}, State> {
             ))}
           </div>
           <div>
-            {!!this.state.selectedEvent && (
-              <Event id={this.state.selectedEvent} />
+            {!!selectedEventData && (
+              <Event id={selectedEventData.id} name={selectedEventData.name} />
             )}
           </div>
         </div>
